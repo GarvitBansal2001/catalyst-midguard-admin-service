@@ -12,7 +12,11 @@ from connections.asyncpg import upsert
 from settings import (
     BASE_ROUTE,
     ORG_ID,
-    ORG_NAME
+    ORG_NAME,
+    ROOT_USERNAME,
+    ROOT_PASSWORD,
+    ROOT_EMAIL,
+    ROOT_USER_SECRET
 )
 
 app = FastAPI()
@@ -60,6 +64,16 @@ async def add_route_tree():
     }
     await upsert("route_maps", values, ["org", "service"])
 
+async def add_root_user():
+    payload = {
+        "org": ORG_ID,
+        "secret": ROOT_USER_SECRET,
+        "username": ROOT_USERNAME,
+        "password": ROOT_PASSWORD,
+        "email": ROOT_EMAIL
+    }
+    await upsert("users", payload, ["org", "username"])
+
 
 def register_routes():
     app.include_router(health_router, tags=["health"], prefix=BASE_ROUTE)
@@ -74,3 +88,4 @@ async def startup():
     await upsert_default_org()
     register_routes()
     await add_route_tree()
+    await add_root_user()

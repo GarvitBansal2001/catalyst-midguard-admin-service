@@ -57,3 +57,8 @@ async def delete_organization(org):
     if db_data["parent_org"]:
         await update_parent_org(db_data["parent_org"], org, add=False)
     await delete("roles", where)
+    await delete("permissions", where)
+    await delete("users", where)
+    await delete("route_maps", where)
+    await delete("suspended_maps", where)
+    await delete("throttling_maps", where)
