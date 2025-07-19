@@ -31,7 +31,7 @@ def get_effected_routes(diff_map: dict):
 
 
 async def remove_permission_from_route(org: str, route: str, removed_permissions: dict):
-    service = route.strip("/").split("/")[0]
+    service = route.split(" ")[1].strip("/").split("/")[0]
     where = {
         "org = '{}'": org,
         "service = '{}'": service

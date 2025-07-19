@@ -21,7 +21,7 @@ async def set_permission(
             return error_response("Method is required for route permissions", http_status=422)
         path = (await get_generic_path(str(org), body.route, body.method)).strip("/")
         service = body.route.strip("/").split("/")[0]
-        body.route = f"{body.method} /{path}"
+        body.route = f"{body.method} /{service}/{path}"
     try: 
         body_dict = body.dict(by_alias=True)
         await set_permissions(str(org), service, body_dict, is_route_permission)

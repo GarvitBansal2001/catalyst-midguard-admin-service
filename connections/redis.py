@@ -6,7 +6,7 @@ from settings import (
 )
 
 redis_client = None
-KEY_FORMAT = "midguard~{}-{}-"
+KEY_FORMAT = "midguard-service~{}-{}-"
 
 def get_redis_client():
     global redis_client
