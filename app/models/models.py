@@ -31,6 +31,10 @@ class SetRole(BaseModel):
     permissions: dict[str, dict[str, PermissionGroup]] = Field(default_factory=dict)
 
 
+class DeleteRole(BaseModel):
+    role_id: UUID = Field(...)
+
+
 class CreateUser(BaseModel):
     username: str = Field(...)
     password: str = Field(...)

@@ -6,7 +6,7 @@ from settings import (
 )
 
 redis_client = None
-KEY_FORMAT = "midguard~{}-{}-"
+KEY_FORMAT = "midguard-service~{}-{}-"
 
 def get_redis_client():
     global redis_client
@@ -44,4 +44,6 @@ async def set(key, value, ex=None):
 async def get(key):
     client = await get_redis_client()
     value = await client.get(key)
+    if value == None:
+        return None
     return json.loads(value)
