@@ -10,7 +10,7 @@ from logger import logger
 router = APIRouter()
 security = HTTPBasic()
 
-@router.post("/login")
+@router.post("/public/login")
 async def login(
     org: str = Header(...),
     credentials: HTTPBasicCredentials = Depends(security)
@@ -31,7 +31,7 @@ async def login(
         return error_response(f"Error : {e.__class__.__name__}", http_status=401)
 
 
-@router.post("/totp")
+@router.post("/public/totp")
 async def totp(
     org: str = Header(...),
     totp: str = Header(...),
@@ -47,6 +47,8 @@ async def totp(
         if not data:
             return error_response("Invalid username or password", http_status=401)
         data = data[0]
+        if data.get("role_id"):
+            data["role_id"] = str(data.get("role_id"))
         secret = data["secret"]
         totp_verify = pyotp.TOTP(secret)
         if not totp_verify.verify(totp):

@@ -42,6 +42,12 @@ class CreateUser(BaseModel):
     org: UUID = Field(...)
     role_id: Optional[UUID] = None
 
+class UpdateUser(BaseModel):
+    username: str = Field(...)
+    email: str = Field(...)
+    org: UUID = Field(...)
+    role_id: Optional[UUID] = None
+
 class DeleteUser(BaseModel):
     username: str = Field(...)
     org: UUID = Field(...)

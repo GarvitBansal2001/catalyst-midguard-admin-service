@@ -5,13 +5,15 @@ from logger import logger
 from uuid import UUID
 from app.utils.response import success_response, error_response
 from connections.redis import delete_pattern, KEY_FORMAT
-from app.utils.utils import get_generic_path
+from app.utils.utils import get_generic_path, authentication
 
 router = APIRouter()
 
 @router.post("/permissions")
+@authentication(verify_totp=False)
 async def set_permission(
     body: SetPermission = Body(...),
+    authenticationtoken: str = Header(...),
     org: UUID = Header(...)
 ):
     is_route_permission = bool(body.route)

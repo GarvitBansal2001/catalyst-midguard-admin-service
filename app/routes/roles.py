@@ -11,8 +11,10 @@ from connections.asyncpg import delete
 router = APIRouter()
 
 @router.post("/role")
+@authentication(verify_totp=False)
 async def set_role(
     body: SetRole = Body(...),
+    authenticationtoken: str = Header(...),
     org: UUID = Header(...)
 ):
     try:
