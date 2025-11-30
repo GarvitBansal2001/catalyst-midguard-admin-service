@@ -41,6 +41,20 @@ async def select(table: str, columns: list, where_dict: dict):
     return list(map(dict, result))
 
 
+async def update(table: str, values: dict, unique_columns: list):
+    db = await get_db()
+    set_columns = [col for col in values.keys() if col not in unique_columns]
+    set_clause = ", ".join(
+        [f"{col} = ${i+1}" for i, col in enumerate(set_columns)]
+    )
+    where_clause = " AND ".join(
+        [f"{col} = ${len(set_columns) + i + 1}" for i, col in enumerate(unique_columns)]
+    )
+    query = f"UPDATE {table} SET {set_clause} WHERE {where_clause}"
+    params = [values[col] for col in set_columns] + [values[col] for col in unique_columns]
+    return await db.execute(query, *params)
+
+
 async def upsert(table: str, values: dict, unique_columns: list):
     db = await get_db()
     upsert_base_string = "INSERT INTO {} ({}) VALUES ({}) ON CONFLICT ({}) DO UPDATE SET {};"

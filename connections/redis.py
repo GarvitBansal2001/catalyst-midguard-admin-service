@@ -24,7 +24,7 @@ async def get_keys(pattern: str):
 
 async def delete(*keys):
     client = await get_redis_client()
-    return client.execute_command("DEL", *keys)
+    return await client.execute_command("DEL", *keys)
 
 
 async def delete_pattern(pattern: str):
